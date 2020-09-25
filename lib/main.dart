@@ -9,6 +9,7 @@ import 'bloc/auth_bloc/barrell.dart';
 import 'bloc/survey_bloc/barrell.dart';
 import 'bloc/simple_bloc_delegate.dart';
 import 'entities/barrell.dart';
+import './repository/barrell.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
@@ -37,8 +38,22 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MultiRepositoryProvider(
-          providers: [],
-          child: MultiBlocProvider(providers: null, child: null),
+          providers: [
+            RepositoryProvider<AuthRepository>(
+              create: (BuildContext context) => AuthRepository(),
+            ),
+            RepositoryProvider<SurveyRepository>(
+              create: (BuildContext context) => SurveyRepository(),
+            ),
+          ],
+          child: MultiBlocProvider(providers: [
+            BlocProvider<AuthBloc>(
+              create: (BuildContext context) => AuthBloc(
+                me: Provider.of<User>(context, listen: false),
+                authRepo: RepositoryProvider.of<AuthRepository>(context),
+              ),
+            ),
+          ], child: null),
         ),
       ),
     );
