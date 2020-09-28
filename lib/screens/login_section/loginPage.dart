@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:survey/screens/login_section/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:survey/bloc/auth_bloc/barrell.dart';
 import 'package:survey/screens/common_widgets/bezierContainer.dart';
+import '../../bloc/auth_bloc/auth_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -15,12 +15,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // final _loginBloc = BlocProvider.of<LoginBloc>(context);
-  final _authBloc = BlocProvider.of<AuthBloc>(null);
-
-  _onLoginButtonPressed() {
-    _authBloc.add(SignInWithEmailAndPassword());
+  @override
+  void initState() {
+    _authBloc = BlocProvider.of<AuthBloc>(context);
+    super.initState();
   }
+
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  AuthBloc _authBloc;
 
   Widget _backButton() {
     return InkWell(
@@ -41,42 +44,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
-
-  Widget _submitButton() {
-    return RaisedButton(
-        color: Theme.of(context).primaryColor,
-        textColor: Colors.black,
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 150),
-        shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(8.0)),
-        child: Text('LOG IN'),
-        onPressed: () =>
-            () => {print("Click event on Container"), _onLoginButtonPressed});
   }
 
   Widget _title() {
@@ -104,15 +71,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _emailPasswordWidget() {
-    return Column(
-      children: <Widget>[
-        _entryField("Email id"),
-        _entryField("Password", isPassword: true),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -133,11 +91,130 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(height: height * .2),
-                  _title(),
+                  //  _title(),
                   SizedBox(height: 50),
-                  _emailPasswordWidget(),
-                  SizedBox(height: 20),
-                  _submitButton(),
+                  Form(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Email address',
+                              filled: true,
+                              isDense: true,
+                            ),
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            autocorrect: false,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Email is required.';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              filled: true,
+                              isDense: true,
+                            ),
+                            obscureText: true,
+                            controller: _passwordController,
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Password is required.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              textColor: Colors.white,
+                              padding: const EdgeInsets.all(16),
+                              shape: new RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(8.0)),
+                              child: Text('LOG IN'),
+                              onPressed: () => {
+                                    _authBloc.add(SignInWithEmailAndPassword(
+                                        email: _emailController.text,
+                                        password: _passwordController.text))
+                                  })
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Column(
+                  //   children: <Widget>[
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       "email",
+                  //       style: TextStyle(
+                  //           fontWeight: FontWeight.bold, fontSize: 15),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 10,
+                  //     ),
+                  //     TextField(
+                  //         controller: _emailController,
+                  //         obscureText: false,
+                  //         decoration: InputDecoration(
+                  //             border: InputBorder.none,
+                  //             fillColor: Color(0xfff3f3f4),
+                  //             filled: true))
+                  //   ],
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       "password",
+                  //       style: TextStyle(
+                  //           fontWeight: FontWeight.bold, fontSize: 15),
+                  //     ),
+                  //     SizedBox(
+                  //       height: 10,
+                  //     ),
+                  //     TextField(
+                  //         controller: _passwordController,
+                  //         obscureText: true,
+                  //         decoration: InputDecoration(
+                  //             border: InputBorder.none,
+                  //             fillColor: Color(0xfff3f3f4),
+                  //             filled: true))
+                  //   ],
+                  // ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 20),
+                  // RaisedButton(
+                  //     color: Theme.of(context).primaryColor,
+                  //     textColor: Colors.black,
+                  //     padding:
+                  //         EdgeInsets.symmetric(vertical: 15, horizontal: 150),
+                  //     shape: new RoundedRectangleBorder(
+                  //         borderRadius: new BorderRadius.circular(8.0)),
+                  //     child: Text('LOG IN'),
+                  //     onPressed: () => () => {
+                  //           print("Click event on Container"),
+                  //           () => {
+                  //                 _authBloc.add(SignInWithEmailAndPassword(
+                  //                     email: _emailController.text,
+                  //                     password: _passwordController.text))
+                  //               }
+                  //         }),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     alignment: Alignment.centerRight,

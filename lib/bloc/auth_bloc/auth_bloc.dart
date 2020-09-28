@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is SignInWithEmailAndPassword) {
       yield* _mapSignInWithEmailAndPasswordToState(
+        event.email,
         event.password,
       );
     }
@@ -29,14 +30,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Stream<AuthState> _mapSignInWithEmailAndPasswordToState(
+    String email,
     String password,
   ) async* {
-    print('$password');
-
     bool _result = await _authRepo.signInWithEmailAndPassword(
-      email: state.email,
-      password: password.replaceAll("'", "\u0027"),
-    );
+        email: email, password: password);
 
     if (_result) {
       _me.email = state.email;

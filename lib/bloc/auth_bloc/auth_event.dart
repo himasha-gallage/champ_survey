@@ -7,9 +7,11 @@ abstract class AuthEvent extends Equatable {
 
 class SignInWithEmailAndPassword extends AuthEvent {
   final String password;
+  final String email;
 
   SignInWithEmailAndPassword({
     @required this.password,
+    this.email,
   });
 
   @override
