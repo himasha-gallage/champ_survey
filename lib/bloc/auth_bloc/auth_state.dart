@@ -1,27 +1,28 @@
 import 'package:flutter/foundation.dart';
 
 class AuthState {
-  final bool isSignedIn;
+  final bool isSignedInWithEmailPassword;
   final String email;
 
   AuthState({
-    @required this.isSignedIn,
+    @required this.isSignedInWithEmailPassword,
     @required this.email,
   });
 
   factory AuthState.initial() {
     return AuthState(
-      isSignedIn: false,
+      isSignedInWithEmailPassword: false,
       email: '',
     );
   }
 
   AuthState copyWith({
-    bool isSignedIn,
+    bool isSignedInWithEmailPassword,
     String email,
   }) {
     return AuthState(
-      isSignedIn: isSignedIn ?? this.isSignedIn,
+      isSignedInWithEmailPassword:
+          isSignedInWithEmailPassword ?? this.isSignedInWithEmailPassword,
       email: email ?? this.email,
     );
   }
@@ -29,7 +30,7 @@ class AuthState {
   @override
   String toString() {
     return '''AuthState {
-      isSignedIn: $isSignedIn,
+      isSignedInWithEmailPassword: $isSignedInWithEmailPassword,
       email: $email
     }''';
   }

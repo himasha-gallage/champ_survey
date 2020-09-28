@@ -122,6 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
       text: TextSpan(
           text: 'Cha',
           style: GoogleFonts.portLligatSans(
+            // ignore: deprecated_member_use
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,
             fontWeight: FontWeight.w700,

@@ -7,7 +7,13 @@ import 'barrell.dart';
 import '../../repository/barrell.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc({@required User me, @required AuthRepository authRepo});
+  AuthBloc({
+    @required User me,
+    @required AuthRepository authRepo,
+  }) : _authRepo = authRepo;
+
+  User _me;
+  final AuthRepository _authRepo;
 
   @override
   AuthState get initialState => AuthState.initial();
@@ -26,5 +32,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     String password,
   ) async* {
     print('$password');
+
+    bool _result = await _authRepo.signInWithEmailAndPassword(
+      email: state.email,
+      password: password.replaceAll("'", "\u0027"),
+    );
+
+    if (_result) {
+      _me.email = state.email;
+    }
   }
 }

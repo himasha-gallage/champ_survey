@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'screens/login_section/welcomePage.dart';
 import 'bloc/auth_bloc/barrell.dart';
-import 'bloc/survey_bloc/barrell.dart';
 import 'bloc/simple_bloc_delegate.dart';
 import 'entities/barrell.dart';
 import './repository/barrell.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
         textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
           bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
         ),
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
                 authRepo: RepositoryProvider.of<AuthRepository>(context),
               ),
             ),
-          ], child: null),
+          ], child: WelcomePage()),
         ),
       ),
     );
